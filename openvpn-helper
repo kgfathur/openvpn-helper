@@ -256,7 +256,7 @@ if [[ ! -e /etc/openvpn/server/server.conf ]]; then
 	[[ -z "$port" ]] && port="1194"
 	echo
 	echo "Select a DNS server for the clients:"
-	echo "   0) Custom"
+	echo "   0) Custom (dns.txt)"
 	echo "   1) Current system resolvers"
 	echo "   2) Google"
 	echo "   3) 1.1.1.1"
@@ -408,8 +408,9 @@ server $vpn_subnet $vpn_netmask" > /etc/openvpn/server/server.conf
 	# DNS
 	case "$dns" in
 		0)
-			echo 'push "dhcp-option DNS 172.22.50.25"' >> /etc/openvpn/server/server.conf
-			echo 'push "dhcp-option DNS 172.22.0.14"' >> /etc/openvpn/server/server.conf
+			echo "Add custom DNS..."
+			cat $install_dir/dns.txt | awk '{printf "push \"dhcp-option DNS %s\"\n", $1, $2}'
+			cat $install_dir/dns.txt | awk '{printf "push \"dhcp-option DNS %s\"\n", $1, $2}' >> /etc/openvpn/server/server.conf
 		;;
 		1|"")
 			# Locate the proper resolv.conf

@@ -101,6 +101,7 @@ else
     echo ""
     echo "Copying file..."
     cp -v $work_dir/openvpn-helper $install_dir/
+    cp -v $work_dir/dns.txt $install_dir/
     cp -v $work_dir/push-route.txt $install_dir/
     cp -v $work_dir/get-ip.txt $install_dir/
     chmod u+x $install_dir/openvpn-helper
