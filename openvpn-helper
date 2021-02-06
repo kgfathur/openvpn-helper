@@ -382,8 +382,8 @@ tls-crypt tc.key
 topology subnet
 server $vpn_subnet $vpn_netmask" > /etc/openvpn/server/server.conf
 	# IPv6
-	echo 'push "route $push_subnet $push_netmask"' > $install_dir/push-route.txt
 	if yesno --default Yes "Redirect all Traffic? (redirect-gateway) "; then
+		echo "Add redirect-gateway"
 		if [[ -z "$ip6" ]]; then
 			echo 'push "redirect-gateway def1 bypass-dhcp"' >> /etc/openvpn/server/server.conf
 		else
@@ -391,12 +391,15 @@ server $vpn_subnet $vpn_netmask" > /etc/openvpn/server/server.conf
 			echo 'push "redirect-gateway def1 ipv6 bypass-dhcp"' >> /etc/openvpn/server/server.conf
 		fi
 	else
-		sed "s/\$push_subnet/$vpn_subnet/g" $install_dir/push-route.txt | sed "s/\$push_netmask/$vpn_netmask/g" >> /etc/openvpn/server/server.conf
+		echo "Add default push route..."
+		echo "$vpn_subnet $vpn_netmask" | awk '{printf "push \"route %s %s\"\n", $1, $2}'
+		echo "$vpn_subnet $vpn_netmask" | awk '{printf "push \"route %s %s\"\n", $1, $2}' >> /etc/openvpn/server/server.conf
 	fi
 	if yesno --default No "Add Additional routing? "; then
+		echo ""
 		echo "Adding push route:"
-		cat add-route.txt
-		cat add-route.txt | awk '{printf "push \"route %s %s\"\n", $1, $2}' >> /etc/openvpn/server/server.conf
+		cat push-route.txt
+		cat push-route.txt | awk '{printf "push \"route %s %s\"\n", $1, $2}' >> /etc/openvpn/server/server.conf
 		echo ""
 	fi
 
