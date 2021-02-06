@@ -367,6 +367,7 @@ ssbzSibBsu/6iGtCOGEoXJf//////////wIBAg==
 	vpn_cidrs=$(echo "$vpn_cidr" | sed 's/\//\\\//g')
 	sed "s/\$vpn_cidr/$vpn_cidrs/g" $install_dir/get-ip.txt > $install_dir/get-ip.sh
 	chmod u+x $install_dir/get-ip.sh
+	echo -n "$vpn_cidr" > $install_dir/vpn_cidr.txt
 
 	# Generate server.conf
 	echo "local $ip
@@ -644,6 +645,7 @@ else
 				protocol=$(grep '^proto ' /etc/openvpn/server/server.conf | cut -d " " -f 2)
 				if systemctl is-active --quiet firewalld.service; then
 					ip=$($install_dir/get-ip.sh)
+					vpn_cidr=$(cat $install_dir/vpn_cidr.txt)
 					# Using both permanent and not permanent rules to avoid a firewalld reload.
 					firewall-cmd --remove-port="$port"/"$protocol"
 					firewall-cmd --zone=trusted --remove-source=$vpn_cidr
