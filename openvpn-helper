@@ -392,10 +392,12 @@ server $vpn_subnet $vpn_netmask" > /etc/openvpn/server/server.conf
 		fi
 	else
 		sed "s/\$push_subnet/$vpn_subnet/g" $install_dir/push-route.txt | sed "s/\$push_netmask/$vpn_netmask/g" >> /etc/openvpn/server/server.conf
-		echo 'push "route 10.148.0.0 255.255.240.0"' >> /etc/openvpn/server/server.conf
 	fi
 	if yesno --default No "Add Additional routing? "; then
-		echo 'push "route 10.148.0.0 255.255.240.0"' >> /etc/openvpn/server/server.conf
+		echo "Adding push route:"
+		cat add-route.txt
+		cat add-route.txt | awk '{printf "push \"route %s %s\"\n", $1, $2}' >> /etc/openvpn/server/server.conf
+		echo ""
 	fi
 
 	echo 'ifconfig-pool-persist ipp.txt' >> /etc/openvpn/server/server.conf
