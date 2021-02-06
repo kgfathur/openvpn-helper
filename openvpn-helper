@@ -344,10 +344,36 @@ ssbzSibBsu/6iGtCOGEoXJf//////////wIBAg==
 	vpn_netmask="255.255.255.0"
 	
 	if yesno --default No "Set Custom Network Subnet for VPN? "; then
-		vpn_cidr="172.22.51.0/24"
-		vpn_subnet="172.22.51.0"
-		vpn_netmask="255.255.255.0"
+	
+		echo ""
+		echo "VPN CIDR [$vpn_cidr] "
+		until [[ -z "$ip_cidr" ]]; do
+			echo "$ip_cidr: invalid selection."
+			read -p "IPv4 address [1]: " ip_cidr
+		done
+		[[ -z "$ip_cidr" ]] && ip_cidr=$vpn_cidr
+
+		echo ""
+		echo "VPN Subnet [$vpn_subnet] "
+		until [[ -z "$ip_subnet" ]]; do
+			echo "$ip_subnet: invalid selection."
+			read -p "IPv4 address [1]: " ip_subnet
+		done
+		[[ -z "$ip_subnet" ]] && ip_subnet=$vpn_subnet
+
+		echo ""
+		echo "VPN Netmask [$vpn_netmask] "
+		until [[ -z "$ip_netmask" ]]; do
+			echo "$ip_netmask: invalid selection."
+			read -p "IPv4 address [1]: " ip_netmask
+		done
+		[[ -z "$ip_netmask" ]] && ip_netmask=$vpn_netmask
+
+		vpn_cidr=$ip_cidr
+		vpn_subnet=$ip_subnet
+		vpn_netmask=$ip_netmask
 	fi
+	
 	# Generate server.conf
 	echo "local $ip
 port $port
