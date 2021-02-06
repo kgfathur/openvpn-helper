@@ -8,7 +8,9 @@
 # Custom Stuff
 install_dir="$(dirname "$(readlink -f "$0")")"
 cd $install_dir
+echo "install_dir: $install_dir"
 
+exit
 # Detect Debian users running the script with "sh" instead of bash
 if readlink /proc/$$/exe | grep -q "dash"; then
 	echo 'This installer needs to be run with "bash", not "sh".'
@@ -362,7 +364,7 @@ tls-crypt tc.key
 topology subnet
 server $vpn_subnet $vpn_netmask" > /etc/openvpn/server/server.conf
 	# IPv6
-	echo 'push "route $push_subnet $push_netmask"' > push-route.txt
+	echo 'push "route $push_subnet $push_netmask"' > $install_dir/push-route.txt
 	if yesno --default Yes "Redirect all Traffic? (redirect-gateway) "; then
 		if [[ -z "$ip6" ]]; then
 			echo 'push "redirect-gateway def1 bypass-dhcp"' >> /etc/openvpn/server/server.conf
@@ -371,7 +373,7 @@ server $vpn_subnet $vpn_netmask" > /etc/openvpn/server/server.conf
 			echo 'push "redirect-gateway def1 ipv6 bypass-dhcp"' >> /etc/openvpn/server/server.conf
 		fi
 	else
-		sed "s/\$push_subnet/$vpn_subnet/g" push-route.txt | sed "s/\$push_netmask/$vpn_netmask/g" >> /etc/openvpn/server/server.conf
+		sed "s/\$push_subnet/$vpn_subnet/g" $install_dir/push-route.txt | sed "s/\$push_netmask/$vpn_netmask/g" >> /etc/openvpn/server/server.conf
 		echo 'push "route 10.148.0.0 255.255.240.0"' >> /etc/openvpn/server/server.conf
 	fi
 	if yesno --default No "Add Additional routing? "; then
@@ -619,7 +621,7 @@ else
 				protocol=$(grep '^proto ' /etc/openvpn/server/server.conf | cut -d " " -f 2)
 				if systemctl is-active --quiet firewalld.service; then
 					sed "s/\$vpn_cidr/$vpn_cidr/g" $install_dir/get-ip.txt >> $install_dir/get-ip.sh
-					chmod +x $install_dir/get-ip.sh
+					chmod u+x $install_dir/get-ip.sh
 					ip=$($install_dir/get-ip.sh)
 					# Using both permanent and not permanent rules to avoid a firewalld reload.
 					firewall-cmd --remove-port="$port"/"$protocol"

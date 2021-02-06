@@ -11,4 +11,12 @@ install_dir="/opt/openvpn-setup"
 mkdir $install_dir
 cp $work_dir/openvpn-setup $install_dir/
 chmod u+x $install_dir/openvpn-setup
+
+echo "Install update-alternatives..."
 update-alternatives --install /usr/bin/openvpn-setup openvpn-setup /opt/openvpn-setup/openvpn-setup 0
+
+echo ""
+echo "Testing symlink..."
+which openvpn-setup
+
+echo ""
