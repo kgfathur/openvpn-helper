@@ -97,6 +97,12 @@ if [ -f $install_dir/openvpn-helper ]; then
         cp -v $work_dir/get-ip.txt $install_dir/
         chmod u+x $install_dir/openvpn-helper
     fi
+else
+    echo ""
+    echo "Copying file..."
+    cp -v $work_dir/openvpn-helper $install_dir/
+    cp -v $work_dir/get-ip.txt $install_dir/
+    chmod u+x $install_dir/openvpn-helper
 fi
 
 echo "Install update-alternatives..."
