@@ -85,7 +85,7 @@ function yesno()
 }
 
 install_dir="/opt/openvpn-setup"
-if [ ! -d $install_dir ]; the
+if [ ! -d $install_dir ]; then
     mkdir $install_dir
 else
     echo "$install_dir already exist!"
@@ -93,7 +93,7 @@ fi
 
 if [ -f $install_dir/openvpn-setup ]; then
     if yesno --default No "$install_dir/openvpn-setup already exist! Overwrite? ";then    
-        cp $work_dir/openvpn-setup $install_dir/
+        cp -v $work_dir/openvpn-setup $install_dir/
         chmod u+x $install_dir/openvpn-setup
     fi
 fi
