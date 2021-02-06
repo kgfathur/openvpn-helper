@@ -8,9 +8,7 @@
 # Custom Stuff
 install_dir="$(dirname "$(readlink -f "$0")")"
 cd $install_dir
-echo "install_dir: $install_dir"
 
-exit
 # Detect Debian users running the script with "sh" instead of bash
 if readlink /proc/$$/exe | grep -q "dash"; then
 	echo 'This installer needs to be run with "bash", not "sh".'
