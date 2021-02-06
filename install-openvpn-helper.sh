@@ -84,25 +84,27 @@ function yesno()
     [[ "$ans" = "y" || "$ans" == "yes" ]]
 }
 
-install_dir="/opt/openvpn-setup"
+install_dir="/opt/openvpn-helper"
 if [ ! -d $install_dir ]; then
     mkdir $install_dir
 else
     echo "$install_dir already exist!"
 fi
 
-if [ -f $install_dir/openvpn-setup ]; then
-    if yesno --default No "$install_dir/openvpn-setup already exist! Overwrite? ";then    
-        cp -v $work_dir/openvpn-setup $install_dir/
-        chmod u+x $install_dir/openvpn-setup
+if [ -f $install_dir/openvpn-helper ]; then
+    if yesno --default No "$install_dir/openvpn-helper already exist! Overwrite? ";then    
+        cp -v $work_dir/openvpn-helper $install_dir/
+        cp -v $work_dir/get-ip.txt $install_dir/
+        chmod u+x $install_dir/openvpn-helper
     fi
 fi
 
 echo "Install update-alternatives..."
-update-alternatives --install /usr/bin/openvpn-setup openvpn-setup /opt/openvpn-setup/openvpn-setup 0
+update-alternatives --install /usr/bin/openvpn-helper openvpn-helper /opt/openvpn-helper/openvpn-helper 0
 
 echo ""
 echo "Testing symlink..."
-which openvpn-setup
-
+which openvpn-helper
 echo ""
+
+openvpn-helper

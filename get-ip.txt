@@ -1,0 +1,1 @@
+firewall-cmd --direct --get-rules ipv4 nat POSTROUTING | grep '\-s $vpn_cidr '"'"'!'"'"' -d $vpn_cidr' | grep -oE '[^ ]+$'

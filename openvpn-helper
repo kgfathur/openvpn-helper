@@ -618,7 +618,7 @@ else
 				port=$(grep '^port ' /etc/openvpn/server/server.conf | cut -d " " -f 2)
 				protocol=$(grep '^proto ' /etc/openvpn/server/server.conf | cut -d " " -f 2)
 				if systemctl is-active --quiet firewalld.service; then
-					sed "s/\$vpn_cidr/$vpn_cidr/g" $install_dir/get-ip.txt >> $install_dir/get-ip.sh
+					sed "s/\$vpn_cidr/$vpn_cidr/g" $install_dir/get-ip.txt > $install_dir/get-ip.sh
 					chmod u+x $install_dir/get-ip.sh
 					ip=$($install_dir/get-ip.sh)
 					# Using both permanent and not permanent rules to avoid a firewalld reload.
